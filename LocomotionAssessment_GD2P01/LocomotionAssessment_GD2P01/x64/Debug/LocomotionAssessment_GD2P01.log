@@ -1,0 +1,60 @@
+﻿  Window.cpp
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(23,71): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(23,71): warning C4244:         with
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(23,71): warning C4244:         [
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(23,71): warning C4244:             T=float
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(23,71): warning C4244:         ]
+  (compiling source file 'Window.cpp')
+  
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(23,55): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(23,55): warning C4244:         with
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(23,55): warning C4244:         [
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(23,55): warning C4244:             T=float
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(23,55): warning C4244:         ]
+  (compiling source file 'Window.cpp')
+  
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(13,61): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(13,61): warning C4244:         with
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(13,61): warning C4244:         [
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(13,61): warning C4244:             T=float
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(13,61): warning C4244:         ]
+  (compiling source file 'Window.cpp')
+  
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(13,45): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(13,45): warning C4244:         with
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(13,45): warning C4244:         [
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(13,45): warning C4244:             T=float
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(13,45): warning C4244:         ]
+  (compiling source file 'Window.cpp')
+  
+  main.cpp
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(23,71): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(23,71): warning C4244:         with
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(23,71): warning C4244:         [
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(23,71): warning C4244:             T=float
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(23,71): warning C4244:         ]
+  (compiling source file 'main.cpp')
+  
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(23,55): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(23,55): warning C4244:         with
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(23,55): warning C4244:         [
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(23,55): warning C4244:             T=float
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(23,55): warning C4244:         ]
+  (compiling source file 'main.cpp')
+  
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(13,61): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(13,61): warning C4244:         with
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(13,61): warning C4244:         [
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(13,61): warning C4244:             T=float
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(13,61): warning C4244:         ]
+  (compiling source file 'main.cpp')
+  
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(13,45): warning C4244: 'argument': conversion from 'T' to 'unsigned int', possible loss of data
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(13,45): warning C4244:         with
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(13,45): warning C4244:         [
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(13,45): warning C4244:             T=float
+D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\LocomotionAssessment_GD2P01\Window.h(13,45): warning C4244:         ]
+  (compiling source file 'main.cpp')
+  
+  Generating Code...
+  LocomotionAssessment_GD2P01.vcxproj -> D:\Documents\MDS Documents\YearTwoAssignments\GD2P01\LocomotionAssessment_GD2P01\x64\Debug\LocomotionAssessment_GD2P01.exe
