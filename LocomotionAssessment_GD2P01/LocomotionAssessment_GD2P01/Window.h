@@ -1,6 +1,7 @@
 #pragma once
-#include "SFML/Graphics.hpp"
-#include <iostream>
+#include "Actor.h"
+
+using uint = unsigned int;
 
 // Class for holding an SFML window
 class Window
@@ -14,14 +15,29 @@ public:
 	}
 	~Window() = default;
 
+	void Render();
+
+
 	sf::RenderWindow* GetWindow()
 	{
 		return &m_Window;
 	}
 
+	void ReCreateWindow()
+	{
+		m_Window.create(sf::VideoMode(m_WindowSize.x, m_WindowSize.y), m_WindowName);
+	}
+
+	std::string GetWindowName()
+	{
+		return m_WindowName;
+	}
+
 private:
 	sf::RenderWindow m_Window{ sf::VideoMode(m_WindowSize.x, m_WindowSize.y), "Window" };
-	sf::Vector2f m_WindowSize{ 800, 800 };
+	sf::Vector2<uint> m_WindowSize{ 800, 800 };
 	std::string m_WindowName{ "Window" };
+
+	std::vector<Actor*> m_AttachedActors;
 };
 
