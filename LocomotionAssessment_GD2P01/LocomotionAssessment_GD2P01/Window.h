@@ -1,5 +1,6 @@
 #pragma once
-#include "Actor.h"
+#include "MovingAgent.h"
+#include <SFML/Window.hpp>
 
 using uint = unsigned int;
 
@@ -13,7 +14,7 @@ public:
 		m_Window.setTitle(m_WindowName);
 		m_Window.create(sf::VideoMode(m_WindowSize.x, m_WindowSize.y), m_WindowName);
 	}
-	~Window() = default;
+	~Window();
 
 	void Render();
 
@@ -33,11 +34,17 @@ public:
 		return m_WindowName;
 	}
 
+	auto GetAttachedObjects()
+	{
+		return &m_AttachedObjects;
+	}
+
 private:
 	sf::RenderWindow m_Window{ sf::VideoMode(m_WindowSize.x, m_WindowSize.y), "Window" };
 	sf::Vector2<uint> m_WindowSize{ 800, 800 };
 	std::string m_WindowName{ "Window" };
 
-	std::vector<Actor*> m_AttachedActors;
+	std::vector<Actor*> m_AttachedObjects;
+
 };
 

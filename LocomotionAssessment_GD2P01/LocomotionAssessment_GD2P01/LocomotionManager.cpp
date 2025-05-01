@@ -1,13 +1,27 @@
 #include "LocomotionManager.h"
 
+void LocomotionManager::Start()
+{
+	m_InitialSetupComplete = true;
+	CreateWindow("Main Window");
+	CreateLocomotionAgent("Main Window");
+	CreateLocomotionAgent("Main Window");
+	CreateLocomotionAgent("Main Window");
+}
+
 void LocomotionManager::Update()
 {
-	sf::Event event;
-	while (m_Windows[0]->GetWindow()->pollEvent(event))
+	for (int i = 0; i < m_Windows.size(); i++)
 	{
-		if (event.type == sf::Event::Closed)
+		sf::Event event;
+		while (m_Windows[i]->GetWindow()->pollEvent(event))
 		{
-			m_Windows[0]->GetWindow()->close();
+			if (event.type == sf::Event::Closed)
+			{
+				m_Windows[i]->GetWindow()->close();
+				delete m_Windows[i];
+				m_Windows.erase(m_Windows.begin() + i);
+			}
 		}
 	}
 }
@@ -34,7 +48,14 @@ bool LocomotionManager::CreateWindow(std::string _WindowName)
 	return true;
 }
 
+void LocomotionManager::CreateLocomotionAgent(std::string _InWindowName)
+{
+	MovingAgent* newAgent = new MovingAgent;
+	GetWindowByName(_InWindowName)->GetAttachedObjects()->push_back(std::move(newAgent));
+}
+
 // Initialise static variables to prevent multiple declaration
+bool LocomotionManager::m_InitialSetupComplete = false;
 LocomotionManager* LocomotionManager::m_pInstance = nullptr;
 std::mutex LocomotionManager::m_Mutex;
 

@@ -149,15 +149,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Actor.cpp" />
     <ClCompile Include="LocomotionManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MovingAgent.cpp" />
     <ClCompile Include="UIElement.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
     <ClInclude Include="LocomotionManager.h" />
+    <ClInclude Include="MovingAgent.h" />
     <ClInclude Include="UIElement.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

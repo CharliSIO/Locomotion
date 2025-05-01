@@ -2,7 +2,6 @@
 
 #include <threads.h>
 #include <mutex>
-#include <iostream>
 #include <vector>
 #include "Window.h"
 
@@ -19,6 +18,8 @@ public:
 		}
 		return m_pInstance;
 	}
+
+	void Start();
 
 	void Update();
 	void Render();
@@ -48,12 +49,28 @@ public:
 
 	static bool CheckIfApplicationOpen()
 	{
-		if (m_Windows.empty()) return false;
-		return m_Windows[0]->GetWindow()->isOpen();
+		return (!m_Windows.empty());
+	}
+
+	void CreateLocomotionAgent(std::string _InWindowName);
+
+	static float Vec2Magnitude(sf::Vector2f _vector)
+	{
+		return std::sqrtf(std::powf(_vector.x, 2) + std::powf(_vector.y, 2));
+	}
+	static sf::Vector2f NormaliseFVector(sf::Vector2f _vector)
+	{
+		float magnitude = Vec2Magnitude(_vector);
+		return sf::Vector2f(_vector.x / magnitude, _vector.y / magnitude);
+	}
+
+	static sf::Vector2f ClampVec2Magnitude(sf::Vector2f _vec, float _maxMag)
+	{
+		
 	}
 
 private:
-
+	static bool m_InitialSetupComplete;
 	static LocomotionManager* m_pInstance;
 	static std::mutex m_Mutex;
 

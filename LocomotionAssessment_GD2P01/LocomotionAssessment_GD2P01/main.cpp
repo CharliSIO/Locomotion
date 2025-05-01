@@ -3,7 +3,7 @@
 int main()
 {
     LocomotionManager* gManager = LocomotionManager::getInstance();
-    if (!gManager->CreateWindow("Main Window")) return -1;
+    gManager->Start();
 
     while (LocomotionManager::CheckIfApplicationOpen())
     {
