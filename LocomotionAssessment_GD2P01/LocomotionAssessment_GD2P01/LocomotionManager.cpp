@@ -7,20 +7,43 @@ void LocomotionManager::Start()
 	CreateLocomotionAgent("Main Window");
 	CreateLocomotionAgent("Main Window");
 	CreateLocomotionAgent("Main Window");
+
+	m_MouseGizmo = new sf::CircleShape(30.0f, 10);
+	m_MouseGizmo->setOrigin(sf::Vector2f(30.0f, 30.0f));
+	m_MouseGizmo->setOutlineColor(sf::Color::Blue);
+	m_MouseGizmo->setFillColor(sf::Color::Transparent);
+	m_MouseGizmo->setOutlineThickness(-4.0f);
 }
 
 void LocomotionManager::Update()
 {
+	// Update delta time
+	m_DeltaTime = GameClock.getElapsedTime().asSeconds();
+	GameClock.restart();
+	UpdateMousePosWorld();
+	m_MouseGizmo->setPosition(m_MousePosWorld);
+
+	for (auto& window : m_Windows)
+	{
+		window->Update();
+	}
+
+	// Check for events in windows
 	for (int i = 0; i < m_Windows.size(); i++)
 	{
-		sf::Event event;
-		while (m_Windows[i]->GetWindow()->pollEvent(event))
+		if (m_Windows[i]->GetWindow()->hasFocus())
 		{
-			if (event.type == sf::Event::Closed)
+			m_ActiveWindow = m_Windows[i];
+		}
+		while (const std::optional event = m_Windows[i]->GetWindow()->pollEvent())
+		{
+			if (event->is<sf::Event::Closed>())
 			{
 				m_Windows[i]->GetWindow()->close();
 				delete m_Windows[i];
 				m_Windows.erase(m_Windows.begin() + i);
+				m_ActiveWindow = nullptr;
+				break;
 			}
 		}
 	}
@@ -31,6 +54,11 @@ void LocomotionManager::Render()
 	for (Window* win : m_Windows)
 	{
 		win->Render();
+		if (win->GetWindow()->hasFocus())
+		{
+			win->GetWindow()->draw(*m_MouseGizmo);
+		}
+		win->GetWindow()->display();
 	}
 }
 
@@ -60,3 +88,9 @@ LocomotionManager* LocomotionManager::m_pInstance = nullptr;
 std::mutex LocomotionManager::m_Mutex;
 
 std::vector<Window*> LocomotionManager::m_Windows;
+
+sf::Clock LocomotionManager::GameClock;
+float LocomotionManager::m_DeltaTime{ 0.0f };
+sf::Vector2f LocomotionManager::m_MousePosWorld{ 0.0f, 0.0f };
+sf::CircleShape* LocomotionManager::m_MouseGizmo = nullptr;
+Window* LocomotionManager::m_ActiveWindow;

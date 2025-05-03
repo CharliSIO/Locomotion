@@ -9,6 +9,14 @@ Window::~Window()
 	}
 }
 
+void Window::Update()
+{
+	for (auto& obj : m_AttachedObjects)
+	{
+		obj->Update();
+	}
+}
+
 void Window::Render()
 {
 	m_Window.clear(sf::Color::Yellow);
@@ -16,6 +24,4 @@ void Window::Render()
 	{
 		obj->Render(&m_Window);
 	}
-
-	m_Window.display();
 }

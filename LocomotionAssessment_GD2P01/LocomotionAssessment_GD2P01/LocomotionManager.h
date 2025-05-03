@@ -4,11 +4,11 @@
 #include <mutex>
 #include <vector>
 #include "Window.h"
+#include <SFML/System/Vector2.hpp>
 
 class LocomotionManager
 {
 public:
-	LocomotionManager(const LocomotionManager& _Object) = delete;
 
 	static LocomotionManager* getInstance()
 	{
@@ -29,7 +29,7 @@ public:
 	// Iterate through all windows and check if a window with certain name exists
 	// If it does, return it, otherwise return nullptr
 	// Can only have one window of each name active
-	Window* GetWindowByName(std::string _WindowName)
+	static Window* GetWindowByName(std::string _WindowName)
 	{
 		for (int i = 0; i < m_Windows.size(); i++)
 		{
@@ -54,19 +54,27 @@ public:
 
 	void CreateLocomotionAgent(std::string _InWindowName);
 
-	static float Vec2Magnitude(sf::Vector2f _vector)
+	static sf::Vector2f ClampVec2Magnitude(const sf::Vector2f& _vec, float _maxMag)
 	{
-		return std::sqrtf(std::powf(_vector.x, 2) + std::powf(_vector.y, 2));
+		float vecMag = _vec.length();
+		if (_vec.lengthSquared() > _maxMag * _maxMag)
+		{
+			return _vec.normalized() * _maxMag;
+		}
+		else return _vec;
 	}
-	static sf::Vector2f NormaliseFVector(sf::Vector2f _vector)
+	static sf::Vector2f GetVec2Offset(const sf::Vector2f& _vecA, const sf::Vector2f& _vecB)
 	{
-		float magnitude = Vec2Magnitude(_vector);
-		return sf::Vector2f(_vector.x / magnitude, _vector.y / magnitude);
+		return sf::Vector2f(_vecA.x - _vecB.x, _vecA.y - _vecB.y);
 	}
 
-	static sf::Vector2f ClampVec2Magnitude(sf::Vector2f _vec, float _maxMag)
+	static sf::Vector2f GetMousePos()
 	{
-		
+		return m_MousePosWorld;
+	}
+	static float DeltaTime()
+	{
+		return m_DeltaTime;
 	}
 
 private:
@@ -76,7 +84,27 @@ private:
 
 	static std::vector<Window*> m_Windows;
 
+	static sf::Clock GameClock;
+	static float m_DeltaTime;
+	static sf::Vector2f m_MousePosWorld;
+	static sf::CircleShape* m_MouseGizmo;
+	static Window* m_ActiveWindow;
+
+	LocomotionManager(const LocomotionManager&) = delete;
 	LocomotionManager() {};
+
+	void UpdateMousePosWorld()
+	{
+		if (m_ActiveWindow != nullptr)
+		{
+			sf::Vector2i mousePos = sf::Mouse::getPosition(*m_ActiveWindow->GetWindow());
+			m_MousePosWorld = GetWindowByName("Main Window")->GetWindow()->mapPixelToCoords(mousePos);
+		}
+		else
+		{
+			m_MousePosWorld = (sf::Vector2f)sf::Mouse::getPosition(*m_Windows[0]->GetWindow());
+		}
+	}
 };
 
 

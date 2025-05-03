@@ -12,10 +12,11 @@ public:
 	{
 		m_WindowName = _WindowName;
 		m_Window.setTitle(m_WindowName);
-		m_Window.create(sf::VideoMode(m_WindowSize.x, m_WindowSize.y), m_WindowName);
+		m_Window.create(sf::VideoMode(m_WindowSize), m_WindowName);
 	}
 	~Window();
 
+	void Update();
 	void Render();
 
 
@@ -26,7 +27,7 @@ public:
 
 	void ReCreateWindow()
 	{
-		m_Window.create(sf::VideoMode(m_WindowSize.x, m_WindowSize.y), m_WindowName);
+		m_Window.create(sf::VideoMode(m_WindowSize), m_WindowName);
 	}
 
 	std::string GetWindowName()
@@ -40,7 +41,7 @@ public:
 	}
 
 private:
-	sf::RenderWindow m_Window{ sf::VideoMode(m_WindowSize.x, m_WindowSize.y), "Window" };
+	sf::RenderWindow m_Window{ sf::VideoMode(m_WindowSize), "Window" };
 	sf::Vector2<uint> m_WindowSize{ 800, 800 };
 	std::string m_WindowName{ "Window" };
 
