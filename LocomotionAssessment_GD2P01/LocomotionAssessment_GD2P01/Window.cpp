@@ -13,7 +13,12 @@ void Window::Update()
 {
 	for (auto& obj : m_AttachedObjects)
 	{
+		obj->SetWindow(this);
 		obj->Update();
+		if (obj->GetBoundsSize() == sf::Vector2f(0.0f, 0.0f))
+		{
+			obj->SetBoundsSize(GetWindowSize());
+		}
 	}
 }
 

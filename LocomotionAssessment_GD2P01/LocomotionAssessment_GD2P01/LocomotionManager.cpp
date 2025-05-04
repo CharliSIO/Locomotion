@@ -4,9 +4,15 @@ void LocomotionManager::Start()
 {
 	m_InitialSetupComplete = true;
 	CreateWindow("Main Window");
-	CreateLocomotionAgent("Main Window");
-	CreateLocomotionAgent("Main Window");
-	CreateLocomotionAgent("Main Window");
+	CreateLocomotionAgent(sf::Vector2f({ 100, 100 }), "Main Window");
+	CreateLocomotionAgent(sf::Vector2f({ 300, 200 }), "Main Window");
+	CreateLocomotionAgent(sf::Vector2f({ 700, 400 }), "Main Window");
+	CreateLocomotionAgent(sf::Vector2f({ 600, 400 }), "Main Window");
+	CreateLocomotionAgent(sf::Vector2f({ 700, 600 }), "Main Window");
+	CreateLocomotionAgent(sf::Vector2f({ 200, 400 }), "Main Window");
+	CreateLocomotionAgent(sf::Vector2f({ 800, 300 }), "Main Window");
+	CreateLocomotionAgent(sf::Vector2f({ 400, 400 }), "Main Window");
+	m_Windows[0]->SetActorBoundingBox(m_Windows[0]->GetWindowSize());
 
 	m_MouseGizmo = new sf::CircleShape(30.0f, 10);
 	m_MouseGizmo->setOrigin(sf::Vector2f(30.0f, 30.0f));
@@ -76,9 +82,9 @@ bool LocomotionManager::CreateWindow(std::string _WindowName)
 	return true;
 }
 
-void LocomotionManager::CreateLocomotionAgent(std::string _InWindowName)
+void LocomotionManager::CreateLocomotionAgent(sf::Vector2f _Position, std::string _InWindowName)
 {
-	MovingAgent* newAgent = new MovingAgent;
+	MovingAgent* newAgent = new MovingAgent(_Position);
 	GetWindowByName(_InWindowName)->GetAttachedObjects()->push_back(std::move(newAgent));
 }
 

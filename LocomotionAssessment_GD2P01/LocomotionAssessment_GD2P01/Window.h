@@ -19,6 +19,13 @@ public:
 	void Update();
 	void Render();
 
+	void SetActorBoundingBox(sf::Vector2f _Size)
+	{
+		for (auto& obj : m_AttachedObjects)
+		{
+			obj->SetBoundsSize(_Size);
+		}
+	}
 
 	sf::RenderWindow* GetWindow()
 	{
@@ -40,9 +47,14 @@ public:
 		return &m_AttachedObjects;
 	}
 
+	auto GetWindowSize()
+	{
+		return sf::Vector2f(m_WindowSize.x, m_WindowSize.y);
+	}
+
 private:
 	sf::RenderWindow m_Window{ sf::VideoMode(m_WindowSize), "Window" };
-	sf::Vector2<uint> m_WindowSize{ 800, 800 };
+	sf::Vector2u m_WindowSize{ 800, 800 };
 	std::string m_WindowName{ "Window" };
 
 	std::vector<Actor*> m_AttachedObjects;

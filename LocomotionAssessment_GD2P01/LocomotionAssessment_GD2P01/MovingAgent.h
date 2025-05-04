@@ -3,11 +3,16 @@
 class MovingAgent : public Actor
 {
 public:
-	MovingAgent();
+	MovingAgent(sf::Vector2f _Position);
 	~MovingAgent() {};
 
 	void Update() override;
 	void Render(sf::RenderWindow* _RenWindow) override;
+
+	auto GetPosition()
+	{
+		return m_Body->getPosition();
+	}
 protected:
 	sf::CircleShape* m_Body;
 
@@ -35,10 +40,24 @@ protected:
 	sf::Vector2f m_vWanderDesiredVelocity;
 
 	sf::Vector2f m_SteeringForce;
+	float m_NeighbourRadius{ 60.0f };
+
+	float m_fSeparationStrength{ 1.0f };
+	float m_fSeparationWeight{ 1.0f };
+
+	float m_fCohesionStrength{ 1.0f };
+	float m_fCohesionWeight{ 0.0f };
+
+	float m_fAlignmentStrength{ 1.0f };
+	float m_fAlignmentWeight{ 0.0f };
 
 	void Seek();
 	void Flee();
 	void Wander();
+
+	void ManageFlocking();
+
+	void StayInBounds();
 
 	// -------------
 

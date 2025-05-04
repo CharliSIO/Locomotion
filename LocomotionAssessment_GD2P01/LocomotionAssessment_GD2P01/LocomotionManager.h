@@ -52,7 +52,7 @@ public:
 		return (!m_Windows.empty());
 	}
 
-	void CreateLocomotionAgent(std::string _InWindowName);
+	void CreateLocomotionAgent(sf::Vector2f _Position, std::string _InWindowName);
 
 	static sf::Vector2f ClampVec2Magnitude(const sf::Vector2f& _vec, float _maxMag)
 	{
