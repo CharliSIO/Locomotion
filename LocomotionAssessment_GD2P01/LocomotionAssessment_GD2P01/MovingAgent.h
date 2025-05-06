@@ -39,6 +39,8 @@ protected:
 	float m_fWanderStrength{ 1.0f };
 	sf::Vector2f m_vWanderDesiredVelocity;
 
+	sf::Vector2f m_vArriveDesiredVelocity;
+
 	sf::Vector2f m_SteeringForce;
 	float m_NeighbourRadius{ 60.0f };
 
@@ -54,6 +56,9 @@ protected:
 	void Seek();
 	void Flee();
 	void Wander();
+	void Pursuit();
+	void Evade();
+	void Arrive();
 
 	void ManageFlocking();
 

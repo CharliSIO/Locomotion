@@ -70,6 +70,21 @@ void MovingAgent::Flee()
 	ApplySteeringForce(m_vFleeDesiredVelocity, m_fMaxSteerForce, m_fFleeStrength, m_fFleeWeight);
 }
 
+void MovingAgent::Arrive()
+{
+	m_vArriveDesiredVelocity = m_TargetPosition - m_Body->getPosition();
+	float distance = m_vArriveDesiredVelocity.length();
+	if ( distance < m_NeighbourRadius)
+	{
+		m_vArriveDesiredVelocity = m_vArriveDesiredVelocity.normalized() * m_fMaxSpeed * (distance / m_NeighbourRadius);
+	}
+	else
+	{
+		m_vArriveDesiredVelocity = m_vArriveDesiredVelocity.normalized() * m_fMaxSpeed;
+	}
+	ApplySteeringForce(m_vArriveDesiredVelocity, m_fMaxSteerForce, 1.0f, 1.0f);
+}
+
 void MovingAgent::ManageFlocking()
 {
 	sf::Vector2f selfPos = m_Body->getPosition();
