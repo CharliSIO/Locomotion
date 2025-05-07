@@ -40,14 +40,16 @@ protected:
 	sf::Vector2f m_vWanderDesiredVelocity;
 
 	sf::Vector2f m_vArriveDesiredVelocity;
+	float m_fArrivalStrength{ 2.5f };
 
 	sf::Vector2f m_SteeringForce;
-	float m_NeighbourRadius{ 60.0f };
+	float m_NeighbourRadius{ 100.0f };
+	float m_ArriveRadius{ 70.0f };
 
-	float m_fSeparationStrength{ 1.0f };
+	float m_fSeparationStrength{ 2.5f };
 	float m_fSeparationWeight{ 1.0f };
 
-	float m_fCohesionStrength{ 1.0f };
+	float m_fCohesionStrength{ 0.0f };
 	float m_fCohesionWeight{ 0.0f };
 
 	float m_fAlignmentStrength{ 1.0f };
@@ -71,6 +73,7 @@ protected:
 	Line* m_TargetPosGizmo;
 	Line* m_VelocityGizmo;
 	Line* m_SteerForceGizmo;
-
+	sf::CircleShape m_NeighbourGizmo = sf::CircleShape(m_NeighbourRadius, 10.0f );
+	//sf::CircleShape m_ArrivalGizmo;
 };
 

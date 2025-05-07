@@ -149,18 +149,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="ControlWindow.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="LocomotionManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MovingAgent.cpp" />
+    <ClCompile Include="Slider.cpp" />
     <ClCompile Include="UIElement.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="ControlWindow.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="LocomotionManager.h" />
     <ClInclude Include="MovingAgent.h" />
+    <ClInclude Include="Slider.h" />
     <ClInclude Include="UIElement.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>

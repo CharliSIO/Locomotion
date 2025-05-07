@@ -11,18 +11,25 @@ MovingAgent::MovingAgent(sf::Vector2f _Position)
 	m_TargetPosGizmo = new Line(m_Body->getPosition(), m_TargetPosition, sf::Color::Blue);
 	m_VelocityGizmo = new Line(m_Body->getPosition(), m_Body->getPosition() + m_Velocity * m_GizmoDrawLength, sf::Color::Red);
 	m_SteerForceGizmo = new Line(m_Body->getPosition(), m_Body->getPosition() + m_Velocity * m_GizmoDrawLength, sf::Color::Green);
+	m_NeighbourGizmo.setFillColor(sf::Color::Transparent);
+	m_NeighbourGizmo.setOutlineThickness(2.0f);
+	m_NeighbourGizmo.setOrigin(sf::Vector2f(m_NeighbourGizmo.getRadius(), m_NeighbourGizmo.getRadius()));
 }
 
 void MovingAgent::Update()
 {
 	m_TargetPosition = LocomotionManager::GetMousePos();
+
+	if ((m_TargetPosition - m_Body->getPosition()).length() >= 50.0f)
+	{
+		Seek();
+		Flee();
+	}
+	Arrive();
 	ManageFlocking();
 
-	Seek();
-	Flee();
-
 	m_Body->move(m_Velocity * m_fSpeed * LocomotionManager::DeltaTime());
-	if (m_Velocity != sf::Vector2f(0.0f, 0.0f))
+	if (m_Velocity.length() > 0.0f && (m_TargetPosition - m_Body->getPosition()).length() >= 10.0f)
 	{
 		m_Body->setRotation(sf::Vector2f(0.0f, -1.0f).angleTo(m_Velocity));
 	}
@@ -31,11 +38,12 @@ void MovingAgent::Update()
 
 	// UPDATE GIZMOS	
 	m_TargetPosGizmo->Update(m_Body->getPosition(), m_TargetPosition);
-	if (m_Velocity.lengthSquared() != 0.0f)
+	if (m_Velocity.lengthSquared() != 0.0f && m_SteeringForce.lengthSquared() != 0.0f)
 	{
 		m_VelocityGizmo->Update(m_Body->getPosition(), m_Body->getPosition() + m_Velocity.normalized() * m_GizmoDrawLength);
 		m_SteerForceGizmo->Update(m_Body->getPosition() + m_Velocity.normalized() * m_GizmoDrawLength, m_Body->getPosition() + m_SteeringForce.normalized() * m_GizmoDrawLength);
 	}
+	m_NeighbourGizmo.setPosition(m_TargetPosition);
 }
 
 void MovingAgent::Render(sf::RenderWindow* _RenWindow)
@@ -44,6 +52,7 @@ void MovingAgent::Render(sf::RenderWindow* _RenWindow)
 	m_TargetPosGizmo->Render(_RenWindow);
 	m_VelocityGizmo->Render(_RenWindow);
 	m_SteerForceGizmo->Render(_RenWindow);
+	_RenWindow->draw(m_NeighbourGizmo);
 }
 
 void MovingAgent::ApplySteeringForce(sf::Vector2f _DesiredVelocity, float _MaxForce, float _ForceStrength, float _ForceWeight)
@@ -74,15 +83,15 @@ void MovingAgent::Arrive()
 {
 	m_vArriveDesiredVelocity = m_TargetPosition - m_Body->getPosition();
 	float distance = m_vArriveDesiredVelocity.length();
-	if ( distance < m_NeighbourRadius)
+	if ( distance < m_ArriveRadius)
 	{
-		m_vArriveDesiredVelocity = m_vArriveDesiredVelocity.normalized() * m_fMaxSpeed * (distance / m_NeighbourRadius);
+		m_vArriveDesiredVelocity = m_vArriveDesiredVelocity.normalized() * m_fMaxSpeed * (distance / m_ArriveRadius);
 	}
 	else
 	{
 		m_vArriveDesiredVelocity = m_vArriveDesiredVelocity.normalized() * m_fMaxSpeed;
 	}
-	ApplySteeringForce(m_vArriveDesiredVelocity, m_fMaxSteerForce, 1.0f, 1.0f);
+	ApplySteeringForce(m_vArriveDesiredVelocity, m_fMaxSteerForce, m_fArrivalStrength, 1.0f);
 }
 
 void MovingAgent::ManageFlocking()
@@ -134,20 +143,20 @@ void MovingAgent::ManageFlocking()
 	}
 	
 	// Apply forces for each flocking function
-	if (iSCount > 0)
+	if (iSCount > 0 && avgSeparation.lengthSquared() != 0.0f)
 	{
 		avgSeparation /= (float)iSCount;
 		avgSeparation = avgSeparation.normalized() * m_fMaxSpeed;
 		ApplySteeringForce(avgSeparation, m_fMaxSteerForce, m_fSeparationStrength, m_fSeparationWeight);
 	}
-	if (iCCount > 0)
+	if (iCCount > 0 && ((avgCohesionPos / (float)iCCount) - selfPos).lengthSquared() != 0.0f)
 	{
 		auto cohesionCentre = avgCohesionPos / (float)iCCount;
 		auto desiredVel = (cohesionCentre - selfPos).normalized() * m_fMaxSpeed;
 
 		ApplySteeringForce(desiredVel, m_fMaxSteerForce, m_fCohesionStrength, m_fCohesionWeight);
 	}
-	if (iACount > 0)
+	if (iACount > 0 && avgVelocity.lengthSquared() != 0.0f)
 	{
 		avgVelocity /= (float)iACount;
 		avgVelocity = avgVelocity.normalized() * m_fMaxSpeed;

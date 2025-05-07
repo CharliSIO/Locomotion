@@ -8,9 +8,10 @@ using uint = unsigned int;
 class Window
 {
 public:
-	Window(std::string _WindowName) // construct with name
+	Window(std::string _WindowName, sf::Vector2u _Size) // construct with name
 	{
 		m_WindowName = _WindowName;
+		m_WindowSize = _Size;
 		m_Window.setTitle(m_WindowName);
 		m_Window.create(sf::VideoMode(m_WindowSize), m_WindowName);
 	}
@@ -52,7 +53,7 @@ public:
 		return sf::Vector2f(m_WindowSize.x, m_WindowSize.y);
 	}
 
-private:
+protected:
 	sf::RenderWindow m_Window{ sf::VideoMode(m_WindowSize), "Window" };
 	sf::Vector2u m_WindowSize{ 800, 800 };
 	std::string m_WindowName{ "Window" };

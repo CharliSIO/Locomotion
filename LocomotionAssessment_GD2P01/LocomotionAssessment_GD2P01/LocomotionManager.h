@@ -3,7 +3,7 @@
 #include <threads.h>
 #include <mutex>
 #include <vector>
-#include "Window.h"
+#include "ControlWindow.h"
 #include <SFML/System/Vector2.hpp>
 
 class LocomotionManager
@@ -24,7 +24,7 @@ public:
 	void Update();
 	void Render();
 
-	bool CreateWindow(std::string _WindowName);
+	bool CreateWindow(std::string _WindowName, sf::Vector2u _Size);
 
 	// Iterate through all windows and check if a window with certain name exists
 	// If it does, return it, otherwise return nullptr
@@ -52,6 +52,7 @@ public:
 		return (!m_Windows.empty());
 	}
 
+
 	void CreateLocomotionAgent(sf::Vector2f _Position, std::string _InWindowName);
 
 	static sf::Vector2f ClampVec2Magnitude(const sf::Vector2f& _vec, float _maxMag)
@@ -72,10 +73,16 @@ public:
 	{
 		return m_MousePosWorld;
 	}
+	static auto GetActiveWindow()
+	{
+		return m_ActiveWindow;
+	}
 	static float DeltaTime()
 	{
 		return m_DeltaTime;
 	}
+
+	static bool MouseReleased;
 
 private:
 	static bool m_InitialSetupComplete;

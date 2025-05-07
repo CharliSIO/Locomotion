@@ -3,7 +3,7 @@
 void LocomotionManager::Start()
 {
 	m_InitialSetupComplete = true;
-	CreateWindow("Main Window");
+	CreateWindow("Main Window", {1200, 900});
 	CreateLocomotionAgent(sf::Vector2f({ 100, 100 }), "Main Window");
 	CreateLocomotionAgent(sf::Vector2f({ 300, 200 }), "Main Window");
 	CreateLocomotionAgent(sf::Vector2f({ 700, 400 }), "Main Window");
@@ -14,11 +14,11 @@ void LocomotionManager::Start()
 	CreateLocomotionAgent(sf::Vector2f({ 400, 400 }), "Main Window");
 	m_Windows[0]->SetActorBoundingBox(m_Windows[0]->GetWindowSize());
 
-	m_MouseGizmo = new sf::CircleShape(30.0f, 10);
-	m_MouseGizmo->setOrigin(sf::Vector2f(30.0f, 30.0f));
+	m_MouseGizmo = new sf::CircleShape(10.0f, 10);
+	m_MouseGizmo->setOrigin(sf::Vector2f(10.0f, 10.0f));
 	m_MouseGizmo->setOutlineColor(sf::Color::Blue);
 	m_MouseGizmo->setFillColor(sf::Color::Transparent);
-	m_MouseGizmo->setOutlineThickness(-4.0f);
+	m_MouseGizmo->setOutlineThickness(-1.0f);
 }
 
 void LocomotionManager::Update()
@@ -71,14 +71,14 @@ void LocomotionManager::Render()
 // Check if a window with input name already exists, if it does then return false
 // If not then create window and add it to vector with attached name
 // First window created, regardless of name, will be treated as correct window
-bool LocomotionManager::CreateWindow(std::string _WindowName)
+bool LocomotionManager::CreateWindow(std::string _WindowName, sf::Vector2u _Size)
 {
 	if (!m_Windows.empty() && GetWindowByName(_WindowName) != nullptr)
 	{
 		std::cout << "ERROR: Cannot make window with existing name. " << std::endl;
 		return false;
 	}
-	m_Windows.push_back(new Window(_WindowName));
+	m_Windows.push_back(new Window(_WindowName, _Size));
 	return true;
 }
 
@@ -90,6 +90,7 @@ void LocomotionManager::CreateLocomotionAgent(sf::Vector2f _Position, std::strin
 
 // Initialise static variables to prevent multiple declaration
 bool LocomotionManager::m_InitialSetupComplete = false;
+bool LocomotionManager::MouseReleased = false;
 LocomotionManager* LocomotionManager::m_pInstance = nullptr;
 std::mutex LocomotionManager::m_Mutex;
 
