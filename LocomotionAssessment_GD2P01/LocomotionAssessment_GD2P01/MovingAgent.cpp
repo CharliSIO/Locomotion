@@ -1,9 +1,14 @@
 #include "MovingAgent.h"
 #include "LocomotionManager.h"
 #include "Window.h"
+#include <cstdlib>
+#include <math.h>
+#include <cmath>
 
 MovingAgent::MovingAgent(sf::Vector2f _Position)
 {
+	std::srand(time(0));
+
 	m_Body = new sf::CircleShape(30.0f, 3);
 	m_Body->setOrigin(sf::Vector2f(30.0f, 30.0f));
 	m_Body->setPosition(_Position);
@@ -25,11 +30,15 @@ void MovingAgent::Update()
 		Seek();
 		Flee();
 	}
+	Wander();
 	Arrive();
 	ManageFlocking();
 
 	m_Body->move(m_Velocity * m_fSpeed * LocomotionManager::DeltaTime());
-	if (m_Velocity.length() > 0.0f && (m_TargetPosition - m_Body->getPosition()).length() >= 10.0f)
+
+	// change rotation only for large enough velocity changes 
+	// otherwise changes very slightly with small changes with confliction steering forces
+	if (m_Velocity.length() > 5.0f && (m_TargetPosition - m_Body->getPosition()).length() >= 10.0f) 
 	{
 		m_Body->setRotation(sf::Vector2f(0.0f, -1.0f).angleTo(m_Velocity));
 	}
@@ -43,7 +52,7 @@ void MovingAgent::Update()
 		m_VelocityGizmo->Update(m_Body->getPosition(), m_Body->getPosition() + m_Velocity.normalized() * m_GizmoDrawLength);
 		m_SteerForceGizmo->Update(m_Body->getPosition() + m_Velocity.normalized() * m_GizmoDrawLength, m_Body->getPosition() + m_SteeringForce.normalized() * m_GizmoDrawLength);
 	}
-	m_NeighbourGizmo.setPosition(m_TargetPosition);
+	m_NeighbourGizmo.setPosition(m_Body->getPosition());
 }
 
 void MovingAgent::Render(sf::RenderWindow* _RenWindow)
@@ -79,6 +88,25 @@ void MovingAgent::Flee()
 	ApplySteeringForce(m_vFleeDesiredVelocity, m_fMaxSteerForce, m_fFleeStrength, m_fFleeWeight);
 }
 
+void MovingAgent::Wander()
+{
+	m_WanderAdjustTimer -= LocomotionManager::DeltaTime();
+
+	if (m_WanderAdjustTimer < 0.0f)
+	{
+		m_TargetWanderAngle += (std::rand() % 2 - 1);
+		m_WanderAdjustTimer = m_WanderAdjustInterval;
+	}
+	m_WanderAngle = Deg2Rad * std::lerp(m_WanderAngle * Rad2Deg, m_TargetWanderAngle * Rad2Deg, m_AngleLerpSpeed * LocomotionManager::DeltaTime());
+	sf::Vector2f circlePos = m_Velocity.lengthSquared() > 0.0f ? m_Body->getPosition() + m_Velocity.normalized() * m_WanderDist : m_Body->getPosition();
+
+	float angle = m_WanderAngle + (3.1412 * 0.5);
+	sf::Vector2f wanderDir = sf::Vector2f(std::cosf(angle), std::sinf(angle));
+	m_vWanderDesiredVelocity = circlePos + wanderDir * m_WanderRadius;
+
+	ApplySteeringForce(m_vWanderDesiredVelocity, m_fMaxSteerForce, m_fWanderStrength, m_fWanderWeight);
+}
+
 void MovingAgent::Arrive()
 {
 	m_vArriveDesiredVelocity = m_TargetPosition - m_Body->getPosition();
@@ -86,12 +114,8 @@ void MovingAgent::Arrive()
 	if ( distance < m_ArriveRadius)
 	{
 		m_vArriveDesiredVelocity = m_vArriveDesiredVelocity.normalized() * m_fMaxSpeed * (distance / m_ArriveRadius);
+		ApplySteeringForce(m_vArriveDesiredVelocity, m_fMaxSteerForce, m_fArrivalStrength, m_fArriveWeight);
 	}
-	else
-	{
-		m_vArriveDesiredVelocity = m_vArriveDesiredVelocity.normalized() * m_fMaxSpeed;
-	}
-	ApplySteeringForce(m_vArriveDesiredVelocity, m_fMaxSteerForce, m_fArrivalStrength, 1.0f);
 }
 
 void MovingAgent::ManageFlocking()
@@ -103,6 +127,10 @@ void MovingAgent::ManageFlocking()
 	int iSCount = 0;
 	int iCCount = 0;
 	int iACount = 0;
+
+	// strong separation for near to body
+	sf::Vector2f avgSeparationStrong(0.0f, 0.0f);
+	int iSStrongCount = 0;
 
 	auto allActors = m_Window->GetAttachedObjects();
 	std::vector<MovingAgent*> otherAgents;
@@ -138,6 +166,13 @@ void MovingAgent::ManageFlocking()
 					avgVelocity += otherVelocity;
 					iACount++;
 				}
+				if (distanceLength <= m_BodyStrongSeparationRadius) // is in small neighbour rad
+				{
+					auto direction = posDifference.normalized();
+					direction = direction / distanceLength;
+					avgSeparationStrong += direction;
+					iSStrongCount++;
+				}
 			}
 		}
 	}
@@ -161,6 +196,14 @@ void MovingAgent::ManageFlocking()
 		avgVelocity /= (float)iACount;
 		avgVelocity = avgVelocity.normalized() * m_fMaxSpeed;
 		ApplySteeringForce(avgVelocity, m_fMaxSteerForce, m_fAlignmentWeight, m_fAlignmentWeight);
+	}
+
+	// to ensure agents do not overlay in same spot even with cohesion/seek etc
+	if (iSStrongCount > 0 && avgSeparationStrong.lengthSquared() != 0.0f)
+	{
+		avgSeparationStrong /= (float)iSStrongCount;
+		avgSeparationStrong = avgSeparationStrong.normalized() * (m_fMaxSpeed * 1.5f);
+		ApplySteeringForce(avgSeparationStrong, m_fMaxSteerForce, m_fSeparationStrength * 2, 1.0f);
 	}
 
 }

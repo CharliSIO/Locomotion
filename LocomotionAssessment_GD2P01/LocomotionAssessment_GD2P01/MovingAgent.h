@@ -1,5 +1,9 @@
 #pragma once
 #include "Line.h"
+
+constexpr float Deg2Rad = (3.1412f * 2.0f) / 360.0f;
+constexpr float Rad2Deg = 360.0f/ (3.1412f * 2.0f);
+
 class MovingAgent : public Actor
 {
 public:
@@ -13,6 +17,46 @@ public:
 	{
 		return m_Body->getPosition();
 	}
+
+	void SetSeek()
+	{
+		m_fSeekWeight = 1.0f;
+		m_fArriveWeight = 1.0f;
+		m_fFleeWeight = 0.0f;
+		m_fWanderWeight = 0.0f;
+	}
+
+	void SetFlee()
+	{
+		m_fFleeWeight = 1.0f;
+		m_fSeekWeight = 0.0f;
+		m_fWanderWeight = 0.0f;
+		m_fArriveWeight = -1.0f;
+	}
+
+	void SetWander()
+	{
+		m_fWanderWeight = 1.0f;
+		m_fSeekWeight = 0.0f;
+		m_fFleeWeight = 0.0f;
+		m_fArriveWeight = 0.0f;
+	}
+
+	void SetSeparationWeight(float _val)
+	{
+		m_fSeparationWeight = _val;
+	}
+
+	void SetCohesionWeight(float _val)
+	{
+		m_fCohesionWeight = _val;
+	}
+
+	void SetAlignmentWeight(float _val)
+	{
+		m_fAlignmentWeight = _val;
+	}
+
 protected:
 	sf::CircleShape* m_Body;
 
@@ -27,26 +71,46 @@ protected:
 
 
 	// LOCOMOTION BEHAVIOURS - INDIVIDUAL ---------
-	float m_fSeekWeight{ 1.0f };
+	// 
+	// weighting for seek behaviour
+	float m_fSeekWeight{ 0.0f };
 	float m_fSeekStrength{ 1.0f };
 	sf::Vector2f m_vSeekDesiredVelocity;
 
-	float m_fFleeWeight{ 0.0f };
+	float m_fFleeWeight{ 1.0f };
 	float m_fFleeStrength{ 1.0f };
 	sf::Vector2f m_vFleeDesiredVelocity;
 
+	float m_fArriveWeight{ -1.0f };
+	float m_fArrivalStrength{ 1.0f };
+	sf::Vector2f m_vArriveDesiredVelocity;
+
+	// -- WANDER
 	float m_fWanderWeight{ 0.0f };
 	float m_fWanderStrength{ 1.0f };
 	sf::Vector2f m_vWanderDesiredVelocity;
 
-	sf::Vector2f m_vArriveDesiredVelocity;
-	float m_fArrivalStrength{ 2.5f };
+	float m_WanderAdjustTimer{ 0.0f };
+	float m_WanderAdjustInterval{ 2.0f };
+	float m_WanderDist{ 100 };
+	float m_WanderRadius{ 1.0f };
+	float m_WanderAngle{ 0.0f };
+	float m_TargetWanderAngle{ 0.0f };
+	float m_TargetAngleMultiplier{ 10.0f };
+	float m_AngleLerpSpeed{ 50.0f };
+	//
 
+	// --------------------------
+
+	// FLOCKING ------------------------------------
+
+	// steering force (shared over behaviours)
 	sf::Vector2f m_SteeringForce;
 	float m_NeighbourRadius{ 100.0f };
 	float m_ArriveRadius{ 70.0f };
+	float m_BodyStrongSeparationRadius{ 40.0f };
 
-	float m_fSeparationStrength{ 2.5f };
+	float m_fSeparationStrength{ 1.0f };
 	float m_fSeparationWeight{ 1.0f };
 
 	float m_fCohesionStrength{ 0.0f };
@@ -54,6 +118,8 @@ protected:
 
 	float m_fAlignmentStrength{ 1.0f };
 	float m_fAlignmentWeight{ 0.0f };
+
+	// --------------------------------------
 
 	void Seek();
 	void Flee();

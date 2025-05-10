@@ -6,7 +6,10 @@ public:
 	ControlWindow();
 	~ControlWindow();
 
-protected:
+	void Update();
+	void Render();
 
+protected:
+	void CreateUI();
 };
 

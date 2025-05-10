@@ -24,7 +24,8 @@ public:
 	void Update();
 	void Render();
 
-	bool CreateWindow(std::string _WindowName, sf::Vector2u _Size);
+	static bool CreateWindow(std::string _WindowName, sf::Vector2u _Size);
+	void CreateControlPanel();
 
 	// Iterate through all windows and check if a window with certain name exists
 	// If it does, return it, otherwise return nullptr
@@ -83,6 +84,97 @@ public:
 	}
 
 	static bool MouseReleased;
+
+	// change basic locomotion modes
+	static void SetModeSeek(Window* _window)
+	{
+		if (_window != nullptr)
+		{
+			auto actors = _window->GetAttachedObjects();
+			for (auto& a : *actors)
+			{
+				if (MovingAgent* agent = dynamic_cast<MovingAgent*>(a))
+				{
+					agent->SetSeek();
+				}
+			}
+		}
+	}
+
+	static void SetModeFlee(Window* _window)
+	{
+		if (_window != nullptr)
+		{
+			auto actors = _window->GetAttachedObjects();
+			for (auto& a : *actors)
+			{
+				if (MovingAgent* agent = dynamic_cast<MovingAgent*>(a))
+				{
+					agent->SetFlee();
+				}
+			}
+		}
+	}
+
+	static void SetModeWander(Window* _window)
+	{
+		if (_window != nullptr)
+		{
+			auto actors = _window->GetAttachedObjects();
+			for (auto& a : *actors)
+			{
+				if (MovingAgent* agent = dynamic_cast<MovingAgent*>(a))
+				{
+					agent->SetWander();
+				}
+			}
+		}
+	}
+
+	static void SetSeparationWeight(Window* _window, float _newValue)
+	{
+		if (_window != nullptr)
+		{
+			auto actors = _window->GetAttachedObjects();
+			for (auto& a : *actors)
+			{
+				if (MovingAgent* agent = dynamic_cast<MovingAgent*>(a))
+				{
+					agent->SetSeparationWeight(_newValue);
+				}
+			}
+		}
+	}
+
+	static void SetCohesionWeight(Window* _window, float _newValue)
+	{
+		if (_window != nullptr)
+		{
+			auto actors = _window->GetAttachedObjects();
+			for (auto& a : *actors)
+			{
+				if (MovingAgent* agent = dynamic_cast<MovingAgent*>(a))
+				{
+					agent->SetCohesionWeight(_newValue);
+				}
+			}
+		}
+	}
+
+	static void SetAlignmentWeight(Window* _window, float _newValue)
+	{
+		if (_window != nullptr)
+		{
+			auto actors = _window->GetAttachedObjects();
+			for (auto& a : *actors)
+			{
+				if (MovingAgent* agent = dynamic_cast<MovingAgent*>(a))
+				{
+					agent->SetAlignmentWeight(_newValue);
+				}
+			}
+		}
+	}
 
 private:
 	static bool m_InitialSetupComplete;

@@ -24,7 +24,7 @@ void Window::Update()
 
 void Window::Render()
 {
-	m_Window.clear(sf::Color::Yellow);
+	m_Window.clear(sf::Color::Black);
 	for (auto &obj: m_AttachedObjects)
 	{
 		obj->Render(&m_Window);

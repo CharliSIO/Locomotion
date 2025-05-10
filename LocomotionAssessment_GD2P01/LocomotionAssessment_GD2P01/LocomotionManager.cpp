@@ -4,6 +4,8 @@ void LocomotionManager::Start()
 {
 	m_InitialSetupComplete = true;
 	CreateWindow("Main Window", {1200, 900});
+	CreateControlPanel();
+
 	CreateLocomotionAgent(sf::Vector2f({ 100, 100 }), "Main Window");
 	CreateLocomotionAgent(sf::Vector2f({ 300, 200 }), "Main Window");
 	CreateLocomotionAgent(sf::Vector2f({ 700, 400 }), "Main Window");
@@ -43,6 +45,8 @@ void LocomotionManager::Update()
 		}
 		while (const std::optional event = m_Windows[i]->GetWindow()->pollEvent())
 		{
+			m_Windows[i]->GetGUI()->handleEvent(*event);
+
 			if (event->is<sf::Event::Closed>())
 			{
 				m_Windows[i]->GetWindow()->close();
@@ -64,6 +68,7 @@ void LocomotionManager::Render()
 		{
 			win->GetWindow()->draw(*m_MouseGizmo);
 		}
+		win->GetGUI()->draw();
 		win->GetWindow()->display();
 	}
 }
@@ -80,6 +85,11 @@ bool LocomotionManager::CreateWindow(std::string _WindowName, sf::Vector2u _Size
 	}
 	m_Windows.push_back(new Window(_WindowName, _Size));
 	return true;
+}
+
+void LocomotionManager::CreateControlPanel()
+{
+	m_Windows.push_back(new ControlWindow());
 }
 
 void LocomotionManager::CreateLocomotionAgent(sf::Vector2f _Position, std::string _InWindowName)
