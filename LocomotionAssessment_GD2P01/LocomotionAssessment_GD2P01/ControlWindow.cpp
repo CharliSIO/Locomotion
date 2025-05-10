@@ -51,7 +51,7 @@ void ControlWindow::CreateUI()
 
 	seekButton->onClick(&LocomotionManager::SetModeSeek, LocomotionManager::GetWindowByName("Main Window"));
 	fleeButton->onClick(&LocomotionManager::SetModeFlee, LocomotionManager::GetWindowByName("Main Window"));
-	fleeButton->onClick(&LocomotionManager::SetModeWander, LocomotionManager::GetWindowByName("Main Window"));
+	wanderButton->onClick(&LocomotionManager::SetModeWander, LocomotionManager::GetWindowByName("Main Window"));
 
 	separationSlider->onValueChange(&LocomotionManager::SetSeparationWeight, LocomotionManager::GetWindowByName("Main Window"));
 	cohesionSlider->onValueChange(&LocomotionManager::SetCohesionWeight, LocomotionManager::GetWindowByName("Main Window"));

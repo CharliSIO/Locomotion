@@ -31,7 +31,7 @@ public:
 		m_fFleeWeight = 1.0f;
 		m_fSeekWeight = 0.0f;
 		m_fWanderWeight = 0.0f;
-		m_fArriveWeight = -1.0f;
+		m_fArriveWeight = 0.0f;
 	}
 
 	void SetWander()
@@ -65,7 +65,7 @@ protected:
 	float m_fSpeed{ 10.0f };
 	float m_fMaxSpeed{ 20.0f };
 	float m_fMaxSteerForce{ 10.0f };
-	sf::Vector2f m_Velocity{ 0.0f, 0.0f };
+	sf::Vector2f m_Velocity{ 1.0f, 1.0f };
 
 	void ApplySteeringForce(sf::Vector2f _DesiredVelocity, float _MaxForce, float _ForceStrength, float _ForceWeight);
 
@@ -77,26 +77,29 @@ protected:
 	float m_fSeekStrength{ 1.0f };
 	sf::Vector2f m_vSeekDesiredVelocity;
 
-	float m_fFleeWeight{ 1.0f };
+	float m_fFleeWeight{ 0.0f };
 	float m_fFleeStrength{ 1.0f };
 	sf::Vector2f m_vFleeDesiredVelocity;
 
-	float m_fArriveWeight{ -1.0f };
+	float m_fArriveWeight{ 0.0f };
 	float m_fArrivalStrength{ 1.0f };
 	sf::Vector2f m_vArriveDesiredVelocity;
 
 	// -- WANDER
-	float m_fWanderWeight{ 0.0f };
+	float m_fWanderWeight{ 1.0f };
 	float m_fWanderStrength{ 1.0f };
 	sf::Vector2f m_vWanderDesiredVelocity;
 
 	float m_WanderAdjustTimer{ 0.0f };
 	float m_WanderAdjustInterval{ 2.0f };
-	float m_WanderDist{ 100 };
+	float m_WanderDist{ 200.0f };
 	float m_WanderRadius{ 1.0f };
+	sf::Vector2f m_CircleCentre{ 0.0f, 0.0f };
+	sf::Vector2f m_CircumferenceTarget{ 0.0f, 0.0f };
+
 	float m_WanderAngle{ 0.0f };
 	float m_TargetWanderAngle{ 0.0f };
-	float m_TargetAngleMultiplier{ 10.0f };
+	float m_TargetAngleMultiplier{ 0.0f };
 	float m_AngleLerpSpeed{ 50.0f };
 	//
 
@@ -116,7 +119,7 @@ protected:
 	float m_fCohesionStrength{ 0.0f };
 	float m_fCohesionWeight{ 0.0f };
 
-	float m_fAlignmentStrength{ 1.0f };
+	float m_fAlignmentStrength{ 0.0f };
 	float m_fAlignmentWeight{ 0.0f };
 
 	// --------------------------------------

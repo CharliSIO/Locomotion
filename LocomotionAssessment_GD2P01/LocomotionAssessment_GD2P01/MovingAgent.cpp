@@ -19,6 +19,9 @@ MovingAgent::MovingAgent(sf::Vector2f _Position)
 	m_NeighbourGizmo.setFillColor(sf::Color::Transparent);
 	m_NeighbourGizmo.setOutlineThickness(2.0f);
 	m_NeighbourGizmo.setOrigin(sf::Vector2f(m_NeighbourGizmo.getRadius(), m_NeighbourGizmo.getRadius()));
+
+	m_CircleCentre = m_Body->getPosition() + (m_Velocity.normalized() * m_WanderDist);
+	m_CircumferenceTarget = m_CircleCentre + (m_Velocity.normalized() * m_WanderRadius);
 }
 
 void MovingAgent::Update()
@@ -30,7 +33,7 @@ void MovingAgent::Update()
 		Seek();
 		Flee();
 	}
-	Wander();
+	//Wander();
 	Arrive();
 	ManageFlocking();
 
@@ -94,17 +97,30 @@ void MovingAgent::Wander()
 
 	if (m_WanderAdjustTimer < 0.0f)
 	{
-		m_TargetWanderAngle += (std::rand() % 2 - 1);
+		m_TargetWanderAngle += ((std::rand() % 3) - 1) * (std::rand() % 10);
 		m_WanderAdjustTimer = m_WanderAdjustInterval;
 	}
+
+	m_CircleCentre = m_Body->getPosition() + (m_Velocity.normalized() * m_WanderDist);
+	m_CircumferenceTarget.x = (m_CircumferenceTarget.x * std::cosf(m_TargetWanderAngle)) - (m_CircumferenceTarget.y * std::sinf(m_TargetWanderAngle));
+	m_CircumferenceTarget.y = (m_CircumferenceTarget.x * std::sinf(m_TargetWanderAngle)) + (m_CircumferenceTarget.y * std::cosf(m_TargetWanderAngle));
+
+	sf::Vector2f displacement = m_CircleCentre + m_CircumferenceTarget;
+	ApplySteeringForce(displacement, m_fMaxSteerForce, m_fWanderStrength, m_fWanderWeight);
+	/*
 	m_WanderAngle = Deg2Rad * std::lerp(m_WanderAngle * Rad2Deg, m_TargetWanderAngle * Rad2Deg, m_AngleLerpSpeed * LocomotionManager::DeltaTime());
 	sf::Vector2f circlePos = m_Velocity.lengthSquared() > 0.0f ? m_Body->getPosition() + m_Velocity.normalized() * m_WanderDist : m_Body->getPosition();
 
 	float angle = m_WanderAngle + (3.1412 * 0.5);
 	sf::Vector2f wanderDir = sf::Vector2f(std::cosf(angle), std::sinf(angle));
+
 	m_vWanderDesiredVelocity = circlePos + wanderDir * m_WanderRadius;
 
-	ApplySteeringForce(m_vWanderDesiredVelocity, m_fMaxSteerForce, m_fWanderStrength, m_fWanderWeight);
+	auto wanderSteeringForce = m_vWanderDesiredVelocity - m_Velocity;
+	wanderSteeringForce = LocomotionManager::ClampVec2Magnitude(m_SteeringForce, m_fMaxSteerForce);
+
+	m_Velocity += wanderSteeringForce * m_fMaxSteerForce * m_fWanderWeight * LocomotionManager::DeltaTime();
+	m_Velocity = LocomotionManager::ClampVec2Magnitude(m_Velocity, m_fMaxSpeed);*/
 }
 
 void MovingAgent::Arrive()
@@ -202,10 +218,9 @@ void MovingAgent::ManageFlocking()
 	if (iSStrongCount > 0 && avgSeparationStrong.lengthSquared() != 0.0f)
 	{
 		avgSeparationStrong /= (float)iSStrongCount;
-		avgSeparationStrong = avgSeparationStrong.normalized() * (m_fMaxSpeed * 1.5f);
-		ApplySteeringForce(avgSeparationStrong, m_fMaxSteerForce, m_fSeparationStrength * 2, 1.0f);
+		avgSeparationStrong = avgSeparationStrong.normalized() * (m_fMaxSpeed);
+		ApplySteeringForce(avgSeparationStrong, m_fMaxSteerForce, m_fSeparationStrength , 1.0f);
 	}
-
 }
 
 void MovingAgent::StayInBounds()
