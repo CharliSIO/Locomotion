@@ -24,6 +24,7 @@ public:
 		m_fArriveWeight = 1.0f;
 		m_fFleeWeight = 0.0f;
 		m_fWanderWeight = 0.0f;
+		m_fPursuitWeight = 0.0f;
 	}
 
 	void SetFlee()
@@ -32,6 +33,7 @@ public:
 		m_fSeekWeight = 0.0f;
 		m_fWanderWeight = 0.0f;
 		m_fArriveWeight = 0.0f;
+		m_fPursuitWeight = 0.0f;
 	}
 
 	void SetWander()
@@ -40,6 +42,16 @@ public:
 		m_fSeekWeight = 0.0f;
 		m_fFleeWeight = 0.0f;
 		m_fArriveWeight = 0.0f;
+		m_fPursuitWeight = 0.0f;
+	}
+
+	void SetPursue()
+	{
+		m_fSeekWeight = 0.0f;
+		m_fArriveWeight = 1.0f;
+		m_fFleeWeight = 0.0f;
+		m_fWanderWeight = 0.0f;
+		m_fPursuitWeight = 1.0f;
 	}
 
 	void SetSeparationWeight(float _val)
@@ -71,7 +83,7 @@ protected:
 
 
 	// LOCOMOTION BEHAVIOURS - INDIVIDUAL ---------
-	// 
+	
 	// weighting for seek behaviour
 	float m_fSeekWeight{ 0.0f };
 	float m_fSeekStrength{ 1.0f };
@@ -80,6 +92,11 @@ protected:
 	float m_fFleeWeight{ 0.0f };
 	float m_fFleeStrength{ 1.0f };
 	sf::Vector2f m_vFleeDesiredVelocity;
+
+	float m_fPursuitWeight{ 0.0f };
+	float m_fPursuitStrength{ 1.0f };
+	sf::Vector2f m_vPursuitDesiredVelocity;
+	sf::Vector2f m_vTargetVelocity;
 
 	float m_fArriveWeight{ 0.0f };
 	float m_fArrivalStrength{ 1.0f };
@@ -94,14 +111,11 @@ protected:
 	float m_WanderAdjustInterval{ 2.0f };
 	float m_WanderDist{ 200.0f };
 	float m_WanderRadius{ 1.0f };
-	sf::Vector2f m_CircleCentre{ 0.0f, 0.0f };
-	sf::Vector2f m_CircumferenceTarget{ 0.0f, 0.0f };
-
-	float m_WanderAngle{ 0.0f };
 	float m_TargetWanderAngle{ 0.0f };
-	float m_TargetAngleMultiplier{ 0.0f };
-	float m_AngleLerpSpeed{ 50.0f };
+	sf::Vector2f m_CircleCentre{ 0.0f, 0.0f };
+	sf::Vector2f m_WanderTarget{ 0.0f, 0.0f };
 	//
+	bool m_bTargetMouse = true;
 
 	// --------------------------
 

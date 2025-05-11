@@ -74,6 +74,12 @@ public:
 	{
 		return m_MousePosWorld;
 	}
+	static sf::Vector2f GetMouseVelocity()
+	{
+		return m_MouseVelocity;
+	}
+
+
 	static auto GetActiveWindow()
 	{
 		return m_ActiveWindow;
@@ -126,6 +132,21 @@ public:
 				if (MovingAgent* agent = dynamic_cast<MovingAgent*>(a))
 				{
 					agent->SetWander();
+				}
+			}
+		}
+	}
+
+	static void SetModePursue(Window* _window)
+	{
+		if (_window != nullptr)
+		{
+			auto actors = _window->GetAttachedObjects();
+			for (auto& a : *actors)
+			{
+				if (MovingAgent* agent = dynamic_cast<MovingAgent*>(a))
+				{
+					agent->SetPursue();
 				}
 			}
 		}
@@ -185,7 +206,12 @@ private:
 
 	static sf::Clock GameClock;
 	static float m_DeltaTime;
+
 	static sf::Vector2f m_MousePosWorld;
+	static sf::Vector2f m_MousePosOld;
+	static sf::Vector2f m_MouseVelocity;
+
+
 	static sf::CircleShape* m_MouseGizmo;
 	static Window* m_ActiveWindow;
 
@@ -194,7 +220,9 @@ private:
 
 	void UpdateMousePosWorld()
 	{
-		if (m_ActiveWindow != nullptr)
+		m_MousePosOld = m_MousePosWorld;
+
+		if (m_ActiveWindow != nullptr && GetWindowByName("Main Window") != nullptr)
 		{
 			sf::Vector2i mousePos = sf::Mouse::getPosition(*m_ActiveWindow->GetWindow());
 			m_MousePosWorld = GetWindowByName("Main Window")->GetWindow()->mapPixelToCoords(mousePos);
@@ -203,6 +231,7 @@ private:
 		{
 			m_MousePosWorld = (sf::Vector2f)sf::Mouse::getPosition(*m_Windows[0]->GetWindow());
 		}
+		m_MouseVelocity = m_MousePosWorld - m_MousePosOld;
 	}
 };
 

@@ -109,5 +109,7 @@ std::vector<Window*> LocomotionManager::m_Windows;
 sf::Clock LocomotionManager::GameClock;
 float LocomotionManager::m_DeltaTime{ 0.0f };
 sf::Vector2f LocomotionManager::m_MousePosWorld{ 0.0f, 0.0f };
+sf::Vector2f LocomotionManager::m_MousePosOld{ 0.0f, 0.0f };
+sf::Vector2f LocomotionManager::m_MouseVelocity{ 0.0f, 0.0f };
 sf::CircleShape* LocomotionManager::m_MouseGizmo = nullptr;
 Window* LocomotionManager::m_ActiveWindow;

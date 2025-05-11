@@ -21,39 +21,43 @@ void ControlWindow::Render()
 
 void ControlWindow::CreateUI()
 {
-	auto seekButton = tgui::Button::create("Seek");
-	auto fleeButton = tgui::Button::create("Flee");
-	auto wanderButton = tgui::Button::create("Wander");
+	m_GUI.loadWidgetsFromFile("Resources/ControlWindow.txt");
 
-	auto separationSlider = tgui::Slider::create(0.0f, 1.0f);
-	auto cohesionSlider = tgui::Slider::create(0.0f, 1.0f);
-	auto alignmentSlider = tgui::Slider::create(0.0f, 1.0f);
-
-	separationSlider->setStep(0.1f);
-	cohesionSlider->setStep(0.1f);
-	alignmentSlider->setStep(0.1f);
-
-	m_GUI.add(seekButton, "seekButton");
-	m_GUI.add(fleeButton, "fleeButton");
-	m_GUI.add(wanderButton, "wanderButton");
-
-	m_GUI.add(separationSlider, "separationSlider");
-	m_GUI.add(cohesionSlider, "cohesionSlider");
-	m_GUI.add(alignmentSlider, "alignmentSlider");
-
-	seekButton->setSize("50%", "10%"); seekButton->setOrigin(0.5f, 0.5f); seekButton->setPosition("30%", "10%");
-	fleeButton->setSize("50%", "10%"); fleeButton->setOrigin(0.5f, 0.5f); fleeButton->setPosition("30%", "25%");
-	wanderButton->setSize("50%", "10%"); wanderButton->setOrigin(0.5f, 0.5f); wanderButton->setPosition("30%", "40%");
-
-	separationSlider->setSize("50%", "2%"); separationSlider->setOrigin(0.5f, 0.5f); separationSlider->setPosition("30%", "50%");
-	cohesionSlider->setSize("50%", "2%"); cohesionSlider->setOrigin(0.5f, 0.5f); cohesionSlider->setPosition("30%", "55%");
-	alignmentSlider->setSize("50%", "2%"); alignmentSlider->setOrigin(0.5f, 0.5f); alignmentSlider->setPosition("30%", "60%");
-
-	seekButton->onClick(&LocomotionManager::SetModeSeek, LocomotionManager::GetWindowByName("Main Window"));
-	fleeButton->onClick(&LocomotionManager::SetModeFlee, LocomotionManager::GetWindowByName("Main Window"));
-	wanderButton->onClick(&LocomotionManager::SetModeWander, LocomotionManager::GetWindowByName("Main Window"));
-
-	separationSlider->onValueChange(&LocomotionManager::SetSeparationWeight, LocomotionManager::GetWindowByName("Main Window"));
-	cohesionSlider->onValueChange(&LocomotionManager::SetCohesionWeight, LocomotionManager::GetWindowByName("Main Window"));
-	alignmentSlider->onValueChange(&LocomotionManager::SetAlignmentWeight, LocomotionManager::GetWindowByName("Main Window"));
+	// get pointer to widget in gui builder, must have same name
+	auto seekButton = m_GUI.get<tgui::Button>("seekButton");
+	if (seekButton)
+	{
+		seekButton->onClick(&LocomotionManager::SetModeSeek, LocomotionManager::GetWindowByName("Main Window"));
+	}
+	auto fleeButton = m_GUI.get<tgui::Button>("fleeButton");
+	if (fleeButton)
+	{
+		fleeButton->onClick(&LocomotionManager::SetModeFlee, LocomotionManager::GetWindowByName("Main Window"));
+	}
+	auto wanderButton = m_GUI.get<tgui::Button>("wanderButton");
+	if (wanderButton)
+	{
+		wanderButton->onClick(&LocomotionManager::SetModeWander, LocomotionManager::GetWindowByName("Main Window"));
+	}
+	auto pursuitButton = m_GUI.get<tgui::Button>("pursuitButton");
+	if (pursuitButton)
+	{
+		pursuitButton->onClick(&LocomotionManager::SetModePursue, LocomotionManager::GetWindowByName("Main Window"));
+	}
+	
+	auto separationSlider = m_GUI.get<tgui::Slider>("separationSlider");
+	if (separationSlider)
+	{
+		separationSlider->onValueChange(&LocomotionManager::SetSeparationWeight, LocomotionManager::GetWindowByName("Main Window"));
+	}
+	auto cohesionSlider = m_GUI.get<tgui::Slider>("cohesionSlider");
+	if (cohesionSlider)
+	{
+		cohesionSlider->onValueChange(&LocomotionManager::SetCohesionWeight, LocomotionManager::GetWindowByName("Main Window"));
+	}
+	auto alignmentSlider = m_GUI.get<tgui::Slider>("alignmentSlider");
+	if (alignmentSlider)
+	{
+		alignmentSlider->onValueChange(&LocomotionManager::SetAlignmentWeight, LocomotionManager::GetWindowByName("Main Window"));
+	}
 }
