@@ -2,7 +2,7 @@
 
 int main()
 {
-    tgui::Theme::setDefault("Dependencies/TGUI-1.9/themes/Black.txt");
+    //tgui::Theme::setDefault("Dependencies/TGUI-1.9/themes/Black.txt");
 
     LocomotionManager* gManager = LocomotionManager::getInstance();
     gManager->Start();

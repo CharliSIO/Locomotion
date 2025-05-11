@@ -20,6 +20,7 @@ public:
 
 	void SetSeek()
 	{
+		m_Body->setFillColor(sf::Color::Cyan);
 		m_fSeekWeight = 1.0f;
 		m_fArriveWeight = 1.0f;
 		m_fFleeWeight = 0.0f;
@@ -29,6 +30,7 @@ public:
 
 	void SetFlee()
 	{
+		m_Body->setFillColor(sf::Color::Blue);
 		m_fFleeWeight = 1.0f;
 		m_fSeekWeight = 0.0f;
 		m_fWanderWeight = 0.0f;
@@ -38,6 +40,7 @@ public:
 
 	void SetWander()
 	{
+		m_Body->setFillColor(sf::Color::Green);
 		m_fWanderWeight = 1.0f;
 		m_fSeekWeight = 0.0f;
 		m_fFleeWeight = 0.0f;
@@ -47,6 +50,7 @@ public:
 
 	void SetPursue()
 	{
+		m_Body->setFillColor(sf::Color::Yellow);
 		m_fSeekWeight = 0.0f;
 		m_fArriveWeight = 1.0f;
 		m_fFleeWeight = 0.0f;
@@ -94,7 +98,7 @@ protected:
 	sf::Vector2f m_vFleeDesiredVelocity;
 
 	float m_fPursuitWeight{ 0.0f };
-	float m_fPursuitStrength{ 1.0f };
+	float m_fPursuitStrength{ 1.5f };
 	sf::Vector2f m_vPursuitDesiredVelocity;
 	sf::Vector2f m_vTargetVelocity;
 
@@ -128,12 +132,12 @@ protected:
 	float m_BodyStrongSeparationRadius{ 40.0f };
 
 	float m_fSeparationStrength{ 1.0f };
-	float m_fSeparationWeight{ 1.0f };
+	float m_fSeparationWeight{ 0.0f };
 
-	float m_fCohesionStrength{ 0.0f };
+	float m_fCohesionStrength{ 1.0f };
 	float m_fCohesionWeight{ 0.0f };
 
-	float m_fAlignmentStrength{ 0.0f };
+	float m_fAlignmentStrength{ 1.0f };
 	float m_fAlignmentWeight{ 0.0f };
 
 	// --------------------------------------

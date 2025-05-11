@@ -74,11 +74,6 @@ public:
 	{
 		return m_MousePosWorld;
 	}
-	static sf::Vector2f GetMouseVelocity()
-	{
-		return m_MouseVelocity;
-	}
-
 
 	static auto GetActiveWindow()
 	{
@@ -139,6 +134,7 @@ public:
 
 	static void SetModePursue(Window* _window)
 	{
+		bool setFirstAgentSeek = false;
 		if (_window != nullptr)
 		{
 			auto actors = _window->GetAttachedObjects();
@@ -146,10 +142,23 @@ public:
 			{
 				if (MovingAgent* agent = dynamic_cast<MovingAgent*>(a))
 				{
-					agent->SetPursue();
+					if (!setFirstAgentSeek)
+					{
+						setFirstAgentSeek = true;
+						agent->SetSeek();
+						m_PursueTargetAgent = agent;
+					}
+					else
+					{
+						agent->SetPursue();
+					}
 				}
 			}
 		}
+	}
+	static auto& GetPursueTarget()
+	{
+		return m_PursueTargetAgent;
 	}
 
 	static void SetSeparationWeight(Window* _window, float _newValue)
@@ -208,20 +217,16 @@ private:
 	static float m_DeltaTime;
 
 	static sf::Vector2f m_MousePosWorld;
-	static sf::Vector2f m_MousePosOld;
-	static sf::Vector2f m_MouseVelocity;
-
-
 	static sf::CircleShape* m_MouseGizmo;
 	static Window* m_ActiveWindow;
+
+	static MovingAgent* m_PursueTargetAgent;
 
 	LocomotionManager(const LocomotionManager&) = delete;
 	LocomotionManager() {};
 
 	void UpdateMousePosWorld()
 	{
-		m_MousePosOld = m_MousePosWorld;
-
 		if (m_ActiveWindow != nullptr && GetWindowByName("Main Window") != nullptr)
 		{
 			sf::Vector2i mousePos = sf::Mouse::getPosition(*m_ActiveWindow->GetWindow());
@@ -231,7 +236,6 @@ private:
 		{
 			m_MousePosWorld = (sf::Vector2f)sf::Mouse::getPosition(*m_Windows[0]->GetWindow());
 		}
-		m_MouseVelocity = m_MousePosWorld - m_MousePosOld;
 	}
 };
 

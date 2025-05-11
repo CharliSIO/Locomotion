@@ -1,7 +1,7 @@
 #include "ControlWindow.h"
 #include "LocomotionManager.h"
 
-ControlWindow::ControlWindow() : Window("Control Panel", sf::Vector2u(300.0f, 800.0f))
+ControlWindow::ControlWindow() : Window("Control Panel", sf::Vector2u(400.0f, 700.0f))
 {
 	CreateUI();
 }
@@ -22,6 +22,7 @@ void ControlWindow::Render()
 void ControlWindow::CreateUI()
 {
 	m_GUI.loadWidgetsFromFile("Resources/ControlWindow.txt");
+
 
 	// get pointer to widget in gui builder, must have same name
 	auto seekButton = m_GUI.get<tgui::Button>("seekButton");

@@ -29,6 +29,7 @@ void MovingAgent::Update()
 	{
 		Seek();
 		Flee();
+		Pursuit();
 	}
 	Wander();
 	Arrive();
@@ -94,7 +95,7 @@ void MovingAgent::Wander()
 
 	if (m_WanderAdjustTimer < 0.0f)
 	{
-		m_TargetWanderAngle += ((std::rand() % 3) - 1) * (std::rand() % 10 + 20);
+		m_TargetWanderAngle += ((std::rand() % 3) - 1) * (std::rand() % 20 + 30);
 		m_WanderAdjustTimer = m_WanderAdjustInterval;
 	}
 
@@ -109,23 +110,25 @@ void MovingAgent::Wander()
 
 void MovingAgent::Pursuit()
 {
-	if (m_bTargetMouse)
+	if (LocomotionManager::GetPursueTarget() != nullptr && LocomotionManager::GetPursueTarget() != this)
 	{
-		m_vTargetVelocity = LocomotionManager::GetMouseVelocity();
+		m_vTargetVelocity = LocomotionManager::GetPursueTarget()->m_Velocity;
+		m_TargetPosition = LocomotionManager::GetPursueTarget()->GetPosition();
+
+		sf::Vector2f predictedTargetPos = m_TargetPosition + (m_vTargetVelocity.normalized() * (m_fMaxSpeed * 10));
+
+		sf::Vector2f vecToTarget = predictedTargetPos - m_Body->getPosition();
+
+		m_vPursuitDesiredVelocity = vecToTarget.normalized() * m_fMaxSpeed;
+		ApplySteeringForce(m_vPursuitDesiredVelocity, m_fMaxSteerForce, m_fPursuitStrength, m_fPursuitWeight);
 	}
-
-	float timeToCurrentTarget = (m_TargetPosition - m_Body->getPosition()).length() * m_fMaxSpeed;
-	sf::Vector2f predictedTargetPos = (m_TargetPosition + m_vTargetVelocity) * timeToCurrentTarget;
-
-	m_vPursuitDesiredVelocity = (predictedTargetPos - m_Body->getPosition()).normalized() * m_fMaxSpeed;
-	ApplySteeringForce(m_vPursuitDesiredVelocity, m_fMaxSteerForce, m_fPursuitStrength, m_fPursuitWeight);
 }
 
 void MovingAgent::Arrive()
 {
 	m_vArriveDesiredVelocity = m_TargetPosition - m_Body->getPosition();
 	float distance = m_vArriveDesiredVelocity.length();
-	if ( distance < m_ArriveRadius)
+	if ( distance < m_ArriveRadius && distance > 0.0f)
 	{
 		m_vArriveDesiredVelocity = m_vArriveDesiredVelocity.normalized() * m_fMaxSpeed * (distance / m_ArriveRadius);
 		ApplySteeringForce(m_vArriveDesiredVelocity, m_fMaxSteerForce, m_fArrivalStrength, m_fArriveWeight);
