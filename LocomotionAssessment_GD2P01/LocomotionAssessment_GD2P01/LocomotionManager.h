@@ -1,11 +1,10 @@
 #pragma once
 
-#include <threads.h>
-#include <mutex>
 #include <vector>
 #include "ControlWindow.h"
 #include <SFML/System/Vector2.hpp>
 
+// singleton class for managing the agents and all systems
 class LocomotionManager
 {
 public:
@@ -52,8 +51,7 @@ public:
 	{
 		return (!m_Windows.empty());
 	}
-
-
+	 // create locomotion agent in window with _InWindowName name
 	void CreateLocomotionAgent(sf::Vector2f _Position, std::string _InWindowName);
 
 	static sf::Vector2f ClampVec2Magnitude(const sf::Vector2f& _vec, float _maxMag)
@@ -99,6 +97,7 @@ public:
 					agent->SetSeek();
 				}
 			}
+			LastModeSet = &SetModeSeek;
 		}
 	}
 
@@ -114,6 +113,7 @@ public:
 					agent->SetFlee();
 				}
 			}
+			LastModeSet = &SetModeFlee;
 		}
 	}
 
@@ -129,6 +129,7 @@ public:
 					agent->SetWander();
 				}
 			}
+			LastModeSet = &SetModeWander;
 		}
 	}
 
@@ -154,8 +155,62 @@ public:
 					}
 				}
 			}
+			LastModeSet = &SetModePursue;
 		}
 	}
+	static void SetModeEvade(Window* _window)
+	{
+		bool setFirstAgentSeek = false;
+		if (_window != nullptr)
+		{
+			auto actors = _window->GetAttachedObjects();
+			for (auto& a : *actors)
+			{
+				if (MovingAgent* agent = dynamic_cast<MovingAgent*>(a))
+				{
+					if (!setFirstAgentSeek)
+					{
+						setFirstAgentSeek = true;
+						agent->SetSeek();
+						m_PursueTargetAgent = agent;
+					}
+					else
+					{
+						agent->SetEvade();
+					}
+				}
+			}
+			LastModeSet = &SetModeEvade;
+		}
+	}
+
+	static void SetModeFollowLeader(Window* _window)
+	{
+		bool setFirstAgentSeek = false;
+		if (_window != nullptr)
+		{
+			auto actors = _window->GetAttachedObjects();
+			for (auto& a : *actors)
+			{
+				if (MovingAgent* agent = dynamic_cast<MovingAgent*>(a))
+				{
+					if (!setFirstAgentSeek)
+					{
+						setFirstAgentSeek = true;
+						agent->SetSeek();
+						m_PursueTargetAgent = agent;
+					}
+					else
+					{
+						agent->SetLeaderFollow();
+					}
+				}
+			}
+			LastModeSet = &SetModeFollowLeader;
+		}
+	}
+
+	// get target to purse/evade/follow leader
 	static auto& GetPursueTarget()
 	{
 		return m_PursueTargetAgent;
@@ -173,6 +228,7 @@ public:
 					agent->SetSeparationWeight(_newValue);
 				}
 			}
+			m_FlockSeparationVal = _newValue;
 		}
 	}
 
@@ -188,6 +244,7 @@ public:
 					agent->SetCohesionWeight(_newValue);
 				}
 			}
+			m_FlockCohesionVal = _newValue;
 		}
 	}
 
@@ -203,13 +260,24 @@ public:
 					agent->SetAlignmentWeight(_newValue);
 				}
 			}
+			m_FlockAlignmentVal = _newValue;
 		}
+	}
+
+
+	static bool GetGizmosEnabled()
+	{
+		return m_bGizmosVisible;
+	}
+
+	static void SetGizmosEnabled(bool _enabled)
+	{
+		m_bGizmosVisible = _enabled;
 	}
 
 private:
 	static bool m_InitialSetupComplete;
 	static LocomotionManager* m_pInstance;
-	static std::mutex m_Mutex;
 
 	static std::vector<Window*> m_Windows;
 
@@ -222,9 +290,17 @@ private:
 
 	static MovingAgent* m_PursueTargetAgent;
 
+	static float m_FlockSeparationVal;
+	static float m_FlockCohesionVal;
+	static float m_FlockAlignmentVal;
+
+	static void (*LastModeSet)(Window*);
+	static bool m_bGizmosVisible;
+
 	LocomotionManager(const LocomotionManager&) = delete;
 	LocomotionManager() {};
 
+	// update mouse position in the active window
 	void UpdateMousePosWorld()
 	{
 		if (m_ActiveWindow != nullptr && GetWindowByName("Main Window") != nullptr)

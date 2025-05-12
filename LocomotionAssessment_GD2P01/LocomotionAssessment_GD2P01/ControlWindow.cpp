@@ -6,19 +6,7 @@ ControlWindow::ControlWindow() : Window("Control Panel", sf::Vector2u(400.0f, 70
 	CreateUI();
 }
 
-ControlWindow::~ControlWindow()
-{
-}
-
-void ControlWindow::Update()
-{
-	
-}
-
-void ControlWindow::Render()
-{
-}
-
+// load UI from tGUI txt file and set the functions
 void ControlWindow::CreateUI()
 {
 	m_GUI.loadWidgetsFromFile("Resources/ControlWindow.txt");
@@ -45,6 +33,16 @@ void ControlWindow::CreateUI()
 	{
 		pursuitButton->onClick(&LocomotionManager::SetModePursue, LocomotionManager::GetWindowByName("Main Window"));
 	}
+	auto evadeButton = m_GUI.get<tgui::Button>("evadeButton");
+	if (evadeButton)
+	{
+		evadeButton->onClick(&LocomotionManager::SetModeEvade, LocomotionManager::GetWindowByName("Main Window"));
+	}
+	auto leaderFollowButton = m_GUI.get<tgui::Button>("leaderFollowButton");
+	if (leaderFollowButton)
+	{
+		leaderFollowButton->onClick(&LocomotionManager::SetModeFollowLeader, LocomotionManager::GetWindowByName("Main Window"));
+	}
 	
 	auto separationSlider = m_GUI.get<tgui::Slider>("separationSlider");
 	if (separationSlider)
@@ -60,5 +58,12 @@ void ControlWindow::CreateUI()
 	if (alignmentSlider)
 	{
 		alignmentSlider->onValueChange(&LocomotionManager::SetAlignmentWeight, LocomotionManager::GetWindowByName("Main Window"));
+	}
+
+	auto gizmoCheckBox = m_GUI.get<tgui::CheckBox>("gizmoCheckBox");
+	if (gizmoCheckBox)
+	{
+		gizmoCheckBox->onCheck(&LocomotionManager::SetGizmosEnabled);
+		gizmoCheckBox->onUncheck(&LocomotionManager::SetGizmosEnabled);
 	}
 }

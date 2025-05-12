@@ -4,6 +4,7 @@
 constexpr float Deg2Rad = (3.1412f * 2.0f) / 360.0f;
 constexpr float Rad2Deg = 360.0f/ (3.1412f * 2.0f);
 
+// Moving agent that exhibits locomotion behaviours
 class MovingAgent : public Actor
 {
 public:
@@ -18,6 +19,8 @@ public:
 		return m_Body->getPosition();
 	}
 
+	// SET FORCE WEIGHTINGS FOR DIFFERENT MODES
+
 	void SetSeek()
 	{
 		m_Body->setFillColor(sf::Color::Cyan);
@@ -26,6 +29,8 @@ public:
 		m_fFleeWeight = 0.0f;
 		m_fWanderWeight = 0.0f;
 		m_fPursuitWeight = 0.0f;
+		m_fEvadeWeight = 0.0f;
+		m_LeaderFollowWeight = 0.0f;
 	}
 
 	void SetFlee()
@@ -36,6 +41,8 @@ public:
 		m_fWanderWeight = 0.0f;
 		m_fArriveWeight = 0.0f;
 		m_fPursuitWeight = 0.0f;
+		m_fEvadeWeight = 0.0f;
+		m_LeaderFollowWeight = 0.0f;
 	}
 
 	void SetWander()
@@ -46,6 +53,8 @@ public:
 		m_fFleeWeight = 0.0f;
 		m_fArriveWeight = 0.0f;
 		m_fPursuitWeight = 0.0f;
+		m_fEvadeWeight = 0.0f;
+		m_LeaderFollowWeight = 0.0f;
 	}
 
 	void SetPursue()
@@ -56,6 +65,32 @@ public:
 		m_fFleeWeight = 0.0f;
 		m_fWanderWeight = 0.0f;
 		m_fPursuitWeight = 1.0f;
+		m_fEvadeWeight = 0.0f;
+		m_LeaderFollowWeight = 0.0f;
+	}
+
+	void SetEvade()
+	{
+		m_Body->setFillColor(sf::Color::Red);
+		m_fSeekWeight = 0.0f;
+		m_fArriveWeight = -1.0f;
+		m_fFleeWeight = 0.0f;
+		m_fWanderWeight = 0.0f;
+		m_fPursuitWeight = 0.0f;
+		m_fEvadeWeight = 1.0f;
+		m_LeaderFollowWeight = 0.0f;
+	}
+
+	void SetLeaderFollow()
+	{
+		m_Body->setFillColor(sf::Color::Magenta);
+		m_fSeekWeight = 1.0f;
+		m_fArriveWeight = 2.0f;
+		m_fFleeWeight = 0.0f;
+		m_fWanderWeight = 0.0f;
+		m_fPursuitWeight = 0.0f;
+		m_fEvadeWeight = 0.0f;
+		m_LeaderFollowWeight = 1.0f;
 	}
 
 	void SetSeparationWeight(float _val)
@@ -73,14 +108,19 @@ public:
 		m_fAlignmentWeight = _val;
 	}
 
+	auto GetSightCircle()
+	{
+		return m_SightProjection;
+	}
+
 protected:
 	sf::CircleShape* m_Body;
 
 	sf::Vector2f m_TargetPosition{ 150, 200 };
 
-	float m_fSpeed{ 10.0f };
-	float m_fMaxSpeed{ 20.0f };
-	float m_fMaxSteerForce{ 10.0f };
+	float m_fSpeed{ 15.0f };
+	float m_fMaxSpeed{ 25.0f };
+	float m_fMaxSteerForce{ 15.0f };
 	sf::Vector2f m_Velocity{ 1.0f, 1.0f };
 
 	void ApplySteeringForce(sf::Vector2f _DesiredVelocity, float _MaxForce, float _ForceStrength, float _ForceWeight);
@@ -102,6 +142,10 @@ protected:
 	sf::Vector2f m_vPursuitDesiredVelocity;
 	sf::Vector2f m_vTargetVelocity;
 
+	float m_fEvadeWeight{ 0.0f };
+	float m_fEvadeStrength{ 1.0f };
+	sf::Vector2f m_vEvadeDesiredVelocity;
+
 	float m_fArriveWeight{ 0.0f };
 	float m_fArrivalStrength{ 1.0f };
 	sf::Vector2f m_vArriveDesiredVelocity;
@@ -111,25 +155,26 @@ protected:
 	float m_fWanderStrength{ 1.0f };
 	sf::Vector2f m_vWanderDesiredVelocity;
 
-	float m_WanderAdjustTimer{ 0.0f };
-	float m_WanderAdjustInterval{ 2.0f };
-	float m_WanderDist{ 200.0f };
-	float m_WanderRadius{ 1.0f };
-	float m_TargetWanderAngle{ 0.0f };
+	float m_WanderDist{ 20.0f };
+	float m_WanderRadius{ 60.0f };
+	sf::Angle m_TargetWanderAngle{ sf::degrees(0.0f) };
 	sf::Vector2f m_CircleCentre{ 0.0f, 0.0f };
 	sf::Vector2f m_WanderTarget{ 0.0f, 0.0f };
 	//
 	bool m_bTargetMouse = true;
 
+	sf::CircleShape m_SightProjection{ 50.0f, 10 };
+	float m_ProjectionDistance{ 40.0f };
+	float m_LeaderFollowWeight{ 0.0f };
 	// --------------------------
 
 	// FLOCKING ------------------------------------
 
 	// steering force (shared over behaviours)
 	sf::Vector2f m_SteeringForce;
-	float m_NeighbourRadius{ 100.0f };
-	float m_ArriveRadius{ 70.0f };
-	float m_BodyStrongSeparationRadius{ 40.0f };
+	float m_NeighbourRadius{ 50.0f };
+	float m_ArriveRadius{ 40.0f };
+	float m_BodyStrongSeparationRadius{ 20.0f };
 
 	float m_fSeparationStrength{ 1.0f };
 	float m_fSeparationWeight{ 0.0f };
@@ -149,6 +194,8 @@ protected:
 	void Evade();
 	void Arrive();
 
+	void FollowLeader();
+
 	void ManageFlocking();
 
 	void StayInBounds();
@@ -161,6 +208,5 @@ protected:
 	Line* m_VelocityGizmo;
 	Line* m_SteerForceGizmo;
 	sf::CircleShape m_NeighbourGizmo = sf::CircleShape(m_NeighbourRadius, 10.0f );
-	//sf::CircleShape m_ArrivalGizmo;
 };
 

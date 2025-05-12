@@ -1,0 +1,231 @@
+Renderer.1 {
+    BackgroundColor = rgb(80, 80, 80);
+    BackgroundColorHover = rgb(100, 100, 100);
+    BorderColor = Black;
+    TextColor = rgb(190, 190, 190);
+    TextColorDisabled = rgb(125, 125, 125);
+    TextColorHover = rgb(250, 250, 250);
+    Texture = "themes/Black.png" Part(140, 53, 45, 50) Middle(10, 0) Smooth;
+    TextureDisabled = None;
+    TextureDown = "themes/Black.png" Part(125, 105, 45, 50) Middle(10, 0) Smooth;
+    TextureDownFocused = None;
+    TextureDownHover = None;
+    TextureFocused = "themes/Black.png" Part(93, 53, 45, 50) Middle(10, 0) Smooth;
+    TextureHover = "themes/Black.png" Part(140, 1, 45, 50) Middle(10, 0) Smooth;
+}
+
+Renderer.2 {
+    BorderColor = Black;
+    TextureThumb = "themes/Black.png" Part(253, 171, 30, 30) Smooth;
+    TextureThumbHover = None;
+    TextureTrack = "themes/Black.png" Part(172, 209, 20, 45) Middle(0, 15) Smooth;
+    TextureTrackHover = "themes/Black.png" Part(194, 209, 20, 45) Middle(0, 15) Smooth;
+    ThumbColor = rgb(190, 190, 190);
+    TrackColor = rgb(80, 80, 80);
+}
+
+Renderer.3 {
+    BackgroundColor = transparent;
+    BorderColor = #3C3C3C;
+    Borders = (0, 0, 0, 0);
+    TextColor = #3C3C3C;
+    TextureBackground = None;
+
+    Scrollbar {
+        ArrowBackgroundColor = #F5F5F5;
+        ArrowBackgroundColorHover = white;
+        ArrowColor = #3C3C3C;
+        ArrowColorHover = black;
+        TextureArrowDown = None;
+        TextureArrowDownHover = None;
+        TextureArrowUp = None;
+        TextureArrowUpHover = None;
+        TextureThumb = None;
+        TextureThumbHover = None;
+        TextureTrack = None;
+        TextureTrackHover = None;
+        ThumbColor = #DCDCDC;
+        ThumbColorHover = #E6E6E6;
+        TrackColor = #F5F5F5;
+    }
+}
+
+Button.seekButton {
+    Position = (40, 50);
+    Renderer = &1;
+    Size = (75, 30);
+    Text = Seek;
+    TextSize = 15;
+}
+
+Button.fleeButton {
+    Position = (160, 50);
+    Renderer = &1;
+    Size = (75, 30);
+    Text = Flee;
+    TextSize = 15;
+}
+
+Button.wanderButton {
+    Position = (280, 50);
+    Renderer = &1;
+    Size = (75, 30);
+    Text = Wander;
+    TextSize = 15;
+}
+
+Button.pursuitButton {
+    Position = (40, 120);
+    Renderer = &1;
+    Size = (75, 30);
+    Text = Pursue;
+    TextSize = 15;
+}
+
+Button.evadeButton {
+    Position = (160, 120);
+    Renderer = &1;
+    Size = (75, 30);
+    Text = Evade;
+    TextSize = 15;
+}
+
+Button.leaderFollowButton {
+    Position = (280, 120);
+    Renderer = &1;
+    Size = (75, 30);
+    Text = Leader;
+    TextSize = 15;
+}
+
+Slider.separationSlider {
+    ChangeValueOnScroll = true;
+    InvertedDirection = false;
+    Maximum = 1;
+    Minimum = 0;
+    MouseCursor = Hand;
+    Position = (160, 210);
+    Renderer = &2;
+    Size = (200, 16);
+    Step = 0.1;
+    Value = 0;
+}
+
+Slider.cohesionSlider {
+    ChangeValueOnScroll = true;
+    InvertedDirection = false;
+    Maximum = 1;
+    Minimum = 0;
+    MouseCursor = Hand;
+    Position = (160, 250);
+    Renderer = &2;
+    Size = (200, 16);
+    Step = 0.1;
+    Value = 0;
+}
+
+Slider.alignmentSlider {
+    ChangeValueOnScroll = true;
+    InvertedDirection = false;
+    Maximum = 1;
+    Minimum = 0;
+    MouseCursor = Hand;
+    Position = (160, 290);
+    Renderer = &2;
+    Size = (200, 16);
+    Step = 0.1;
+    Value = 0;
+}
+
+Label.separationLabel {
+    AutoSize = true;
+    Position = (40, 210);
+    Renderer = &3;
+    Size = (75, 17);
+    Text = Separation;
+    TextSize = 13;
+}
+
+Label.cohesionLabel {
+    AutoSize = true;
+    Position = (40, 250);
+    Renderer = &3;
+    Size = (63, 17);
+    Text = Cohesion;
+    TextSize = 13;
+}
+
+Label.alignmentLabel {
+    AutoSize = true;
+    Position = (40, 290);
+    Renderer = &3;
+    Size = (73, 17);
+    Text = Alignment;
+    TextSize = 13;
+}
+
+CheckBox.gizmoCheckBox {
+    Position = (210, 410);
+    Size = (17, 17);
+    TextSize = 13;
+
+    Renderer {
+        BackgroundColor = #F5F5F5;
+        BackgroundColorDisabled = #E6E6E6;
+        BackgroundColorHover = white;
+        BorderColor = #3C3C3C;
+        BorderColorDisabled = #7D7D7D;
+        BorderColorFocused = #1E1EB4;
+        BorderColorHover = black;
+        Borders = (1, 1, 1, 1);
+        CheckColor = #3C3C3C;
+        CheckColorDisabled = #7D7D7D;
+        CheckColorHover = black;
+        TextColor = #3C3C3C;
+        TextColorDisabled = #7D7D7D;
+        TextColorHover = black;
+        TextDistanceRatio = 0.2;
+        TextureChecked = None;
+        TextureCheckedDisabled = None;
+        TextureCheckedFocused = None;
+        TextureCheckedHover = None;
+        TextureUnchecked = None;
+        TextureUncheckedDisabled = None;
+        TextureUncheckedFocused = None;
+        TextureUncheckedHover = None;
+    }
+}
+
+Label.gizmoLabel {
+    AutoSize = true;
+    Position = (130, 410);
+    Size = (53, 17);
+    Text = Gizmos;
+    TextSize = 13;
+
+    Renderer {
+        BackgroundColor = transparent;
+        BorderColor = #3C3C3C;
+        Borders = (0, 0, 0, 0);
+        TextColor = #3C3C3C;
+        TextureBackground = None;
+
+        Scrollbar {
+            ArrowBackgroundColor = #F5F5F5;
+            ArrowBackgroundColorHover = white;
+            ArrowColor = #3C3C3C;
+            ArrowColorHover = black;
+            TextureArrowDown = None;
+            TextureArrowDownHover = None;
+            TextureArrowUp = None;
+            TextureArrowUpHover = None;
+            TextureThumb = None;
+            TextureThumbHover = None;
+            TextureTrack = None;
+            TextureTrackHover = None;
+            ThumbColor = #DCDCDC;
+            ThumbColorHover = #E6E6E6;
+            TrackColor = #F5F5F5;
+        }
+    }
+}

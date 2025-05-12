@@ -5,6 +5,7 @@ void LocomotionManager::Start()
 	m_InitialSetupComplete = true;
 	CreateWindow("Main Window", {1200, 900});
 	CreateControlPanel();
+	LastModeSet = &SetModeSeek;
 
 	CreateLocomotionAgent(sf::Vector2f({ 100, 100 }), "Main Window");
 	CreateLocomotionAgent(sf::Vector2f({ 300, 200 }), "Main Window");
@@ -21,8 +22,10 @@ void LocomotionManager::Start()
 	m_MouseGizmo->setOutlineColor(sf::Color::Blue);
 	m_MouseGizmo->setFillColor(sf::Color::Transparent);
 	m_MouseGizmo->setOutlineThickness(-1.0f);
+
 }
 
+// update systems, moouse pos, delta time, check for windows events and update UI and actors
 void LocomotionManager::Update()
 {
 	// Update delta time
@@ -45,7 +48,7 @@ void LocomotionManager::Update()
 		}
 		while (const std::optional event = m_Windows[i]->GetWindow()->pollEvent())
 		{
-			m_Windows[i]->GetGUI()->handleEvent(*event);
+			m_Windows[i]->GetGUI()->handleEvent(*event); // handle all GUI events
 
 			if (event->is<sf::Event::Closed>())
 			{
@@ -54,6 +57,18 @@ void LocomotionManager::Update()
 				m_Windows.erase(m_Windows.begin() + i);
 				m_ActiveWindow = nullptr;
 				break;
+			}
+
+			// check if main window was clicked - not UI - and needs to add actor
+			if (m_Windows[i]->GetWindowName() == "Main Window")
+			{
+				if (const auto* mouseButtonReleased = event->getIf<sf::Event::MouseButtonReleased>())
+				{
+					if (mouseButtonReleased->button == sf::Mouse::Button::Left)
+					{
+						CreateLocomotionAgent(sf::Vector2f(mouseButtonReleased->position.x, mouseButtonReleased->position.y), "Main Window");
+					}
+				}
 			}
 		}
 	}
@@ -95,14 +110,17 @@ void LocomotionManager::CreateControlPanel()
 void LocomotionManager::CreateLocomotionAgent(sf::Vector2f _Position, std::string _InWindowName)
 {
 	MovingAgent* newAgent = new MovingAgent(_Position);
+	newAgent->SetSeparationWeight(m_FlockSeparationVal);
+	newAgent->SetCohesionWeight(m_FlockCohesionVal);
+	newAgent->SetAlignmentWeight(m_FlockAlignmentVal);
 	GetWindowByName(_InWindowName)->GetAttachedObjects()->push_back(std::move(newAgent));
+	LastModeSet(GetWindowByName(_InWindowName));
 }
 
 // Initialise static variables to prevent multiple declaration
 bool LocomotionManager::m_InitialSetupComplete = false;
 bool LocomotionManager::MouseReleased = false;
 LocomotionManager* LocomotionManager::m_pInstance = nullptr;
-std::mutex LocomotionManager::m_Mutex;
 
 std::vector<Window*> LocomotionManager::m_Windows;
 
@@ -112,3 +130,11 @@ sf::Vector2f LocomotionManager::m_MousePosWorld{ 0.0f, 0.0f };
 MovingAgent* LocomotionManager::m_PursueTargetAgent;
 sf::CircleShape* LocomotionManager::m_MouseGizmo = nullptr;
 Window* LocomotionManager::m_ActiveWindow;
+
+float LocomotionManager::m_FlockSeparationVal{ 0.0f };
+float LocomotionManager::m_FlockCohesionVal{ 0.0f };
+float LocomotionManager::m_FlockAlignmentVal{ 0.0f };
+
+void (*LocomotionManager::LastModeSet)(Window*) { nullptr };
+
+bool LocomotionManager::m_bGizmosVisible{ false };
